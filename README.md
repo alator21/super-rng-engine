@@ -1,15 +1,8 @@
-# super-rng-engine
+# A simple stateful rng engine
 
-To install dependencies:
+```typescript
+const seed = 42;
+const engine = RNGFactory.createEngine('mulberry32',seed);
 
-```bash
-bun install
+const r = engine.next();
 ```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.1.38. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
