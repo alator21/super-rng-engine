@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'bun:test';
 
-import { Mulberry32Engine } from '../Mulberry32Engine';
-import { MersenneTwisterEngine } from '../MersenneTwisterEngine';
-import { XORShift128PlusEngine } from '../XORShift128PlusEngine';
+import { Mulberry32Engine } from '../engine/Mulberry32Engine';
+import { MersenneTwisterEngine } from '../engine/MersenneTwisterEngine';
+import { XORShift128PlusEngine } from '../engine/XORShift128PlusEngine';
 
 describe('determinism', () => {
   describe('Mulberry32', () => {
