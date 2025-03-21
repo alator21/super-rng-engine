@@ -39,12 +39,12 @@ describe('RNGFactory', () => {
 
     it('should throw an error when requesting more items than available', () => {
       const engine = mockEngine([0]);
-      expect(() => randomItemsFromArray(engine, [1, 2], 3)).toThrow("You can't request for more items than they array size.");
+      expect(() => randomItemsFromArray(engine, [1, 2], 3)).toThrow("You can't request more items than the array size.");
     });
 
     it('should throw an error when requesting zero or negative items', () => {
       const engine = mockEngine([0]);
-      expect(() => randomItemsFromArray(engine, [1, 2, 3], 0)).toThrow("You must request for at least 1 item.");
+      expect(() => randomItemsFromArray(engine, [1, 2, 3], 0)).toThrow("You must request at least 1 item.");
     });
   });
 
