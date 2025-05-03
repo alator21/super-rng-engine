@@ -16,7 +16,7 @@ export function createEngine(
   type: "mulberry32" | "xorshift128plus" | "mersenne-twister",
   opts: { seed: number } | { state: string }
 ): RngEngine {
-  const seed: number = "seed" in opts ? opts.seed : 100;
+  const seed: number = "seed" in opts ? opts.seed : (Math.floor(Math.random() * 100000));
   let state: string | undefined = "state" in opts ? opts.state : undefined;
 
   let engine: RngEngine;
