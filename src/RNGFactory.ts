@@ -2,30 +2,35 @@ import { MersenneTwisterEngine } from "./engine/MersenneTwisterEngine";
 import { Mulberry32Engine } from "./engine/Mulberry32Engine";
 import type { RngEngine } from "./engine/RngEngine";
 import { XORShift128PlusEngine } from "./engine/XORShift128PlusEngine";
-
+import { generateSeed } from "./seed";
 
 /**
  * Creates a random number generator (RNG) engine based on the specified type.
  *
  * @param type - The type of RNG engine to create. Supported values: `"mulberry32"`, `"xorshift128plus"`, `"mersenne-twister"`.
- * @param opts - Configuration options for the RNG engine. Either a seed (`{ seed: number }`) or a saved state (`{ state: string }`).
+ * @param seed - Optional.The starting seed of the engine.
  * @returns An instance of an `RngEngine` matching the requested type.
- * @throws An error if an unsupported RNG type is provided.
  */
 export function createEngine(
-  type: "mulberry32" | "xorshift128plus" | "mersenne-twister",
-  opts: { seed: number } | { state: string }
+  type: EngineType,
+  seed?: string
 ): RngEngine {
-  const seed: number = "seed" in opts ? opts.seed : (Math.floor(Math.random() * 100000));
-  let state: string | undefined = "state" in opts ? opts.state : undefined;
+  return createEngineInternal(type, seed);
+}
 
-  let engine: RngEngine;
-  if (type === "mulberry32") engine = new Mulberry32Engine(seed);
-  else if (type === "xorshift128plus") engine = new XORShift128PlusEngine(seed);
-  else if (type === "mersenne-twister") engine = new MersenneTwisterEngine(seed);
-  else throw new Error("Unsupported RNG type");
-
-  if (state !== undefined) engine.setState(state);
+/**
+ * Creates a random number generator (RNG) engine based on the specified type.
+ *
+ * @param type - The type of RNG engine to create. Supported values: `"mulberry32"`, `"xorshift128plus"`, `"mersenne-twister"`.
+ * @param state - The previously saved state of the engine.
+ * @returns An instance of an `RngEngine` matching the requested type.
+ */
+export function createEngineWithState(
+  type: EngineType,
+  state: string
+): RngEngine {
+  const engine = createEngineInternal(type);
+  engine.setState(state);
   return engine;
 }
 
@@ -100,5 +105,24 @@ export function randomInRange(
   }
 
   return Math.floor(engine.next() * (max - min + 1)) + min;
+}
+
+
+
+type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister"
+
+function createEngineInternal(
+  type: EngineType,
+  possibleSeed?: string
+): RngEngine {
+  const seed = generateSeed(possibleSeed);
+  switch (type) {
+    case "mulberry32":
+      return new Mulberry32Engine(seed);
+    case "xorshift128plus":
+      return new XORShift128PlusEngine(seed);
+    case "mersenne-twister":
+      return new MersenneTwisterEngine(seed);
+  }
 }
 
