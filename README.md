@@ -1,10 +1,11 @@
 # A simple stateful rng engine
 
-## Warning: i'm not a math guy - Algorithms(including tests) were mostly AI generated/verified.
-
 ```typescript
-const seed = 42;
-const engine = RNGFactory.createEngine('mulberry32',seed);
+import type { createEngine } from '@alator21/super-rng-engine';
 
-const r = engine.next();
+const seed = 42;
+const engine = createEngine('mulberry32', seed);
+
+const r = engine.next(); // generate a random number between 0 and 1
+const state = engine.getState(); // get engine's state(string representation)
 ```
