@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'bun:test';
-import { randomItemFromArray, randomItemsFromArray, randomInRange } from '../RNGFactory';
-import type { RngEngine } from '../engine/RngEngine';
+import {describe, it, expect} from 'bun:test';
+import {randomItemFromArray, randomItemsFromArray, randomInRange, randomWithWeights, createEngine} from '../RNGFactory';
+import type {RngEngine} from '../engine/RngEngine';
 
 const mockEngine = (sequence: number[]): RngEngine => {
   let index = 0;
@@ -11,7 +11,8 @@ const mockEngine = (sequence: number[]): RngEngine => {
       return value === 1 ? 0.999999 : value; // Ensure it's in [0,1)
     },
     getState: () => '',
-    setState: () => { }
+    setState: () => {
+    }
   };
 };
 
@@ -74,5 +75,73 @@ describe('RNGFactory', () => {
       expect(randomInRange(engine, 1, 10)).toBe(10);
     });
   });
+
+  describe('randomWithWeights', () => {
+    type Item = {
+      name: string;
+      weight: number;
+    };
+
+    const sampleItems: Item[] = [
+      {name: "A", weight: 10},
+      {name: "B", weight: 30},
+      {name: "C", weight: 60},
+    ];
+    it("should respect weights", () => {
+      const engine = mockEngine([0.05, 0.2, 0.9]);
+      const resultA = randomWithWeights(engine, sampleItems, e => e.weight);
+      expect(resultA.name).toBe("A");
+
+      const resultB = randomWithWeights(engine, sampleItems, e => e.weight);
+      expect(resultB.name).toBe("B");
+
+      const resultC = randomWithWeights(engine, sampleItems, e => e.weight);
+      expect(resultC.name).toBe("C");
+    });
+    it("should statistically favor higher weights", () => {
+      const counts: Record<string, number> = {
+        A: 0,
+        B: 0,
+        C: 0,
+      };
+      const runs = 10000;
+      const engine = createEngine('mersenne-twister')
+
+      for (let i = 0; i < runs; i++) {
+        const result = randomWithWeights(engine, sampleItems, e => e.weight);
+        counts[result.name]++;
+      }
+      // C should occur roughly 60% of the time, B ~30%, A ~10%
+      expect(counts.C).toBeGreaterThan(counts.B);
+      expect(counts.B).toBeGreaterThan(counts.A);
+    });
+
+    it("should return last item when weights are tiny and cumulative issues occur", () => {
+      const engine = mockEngine([1]);
+      const tinyWeights = [
+        {name: "X", weight: 1e-10},
+        {name: "Y", weight: 1e-10},
+        {name: "Z", weight: 1e-10},
+      ];
+      const result = randomWithWeights(engine, tinyWeights, e => e.weight);
+      expect(result.name).toBe("Z");
+    });
+    it("should throw with empty array", () => {
+      const engine = createEngine('mersenne-twister')
+
+      expect(() => randomWithWeights(engine, [], () => 1)).toThrow("Can't get an item from an empty array");
+    });
+    it("should return last item if all weights are 0 (fallback)", () => {
+      const engine = createEngine('mersenne-twister')
+      const items = [
+        {name: "X", weight: 0},
+        {name: "Y", weight: 0},
+        {name: "Z", weight: 0},
+      ];
+      const result = randomWithWeights(engine, items, i => i.weight);
+      expect(result.name).toBe("Z");
+    });
+  })
+
 
 });

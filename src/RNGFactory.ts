@@ -1,8 +1,8 @@
-import { MersenneTwisterEngine } from "./engine/MersenneTwisterEngine";
-import { Mulberry32Engine } from "./engine/Mulberry32Engine";
-import type { RngEngine } from "./engine/RngEngine";
-import { XORShift128PlusEngine } from "./engine/XORShift128PlusEngine";
-import { generateSeed } from "./seed";
+import {MersenneTwisterEngine} from "./engine/MersenneTwisterEngine";
+import {Mulberry32Engine} from "./engine/Mulberry32Engine";
+import type {RngEngine} from "./engine/RngEngine";
+import {XORShift128PlusEngine} from "./engine/XORShift128PlusEngine";
+import {generateSeed} from "./seed";
 
 /**
  * Creates a random number generator (RNG) engine based on the specified type.
@@ -106,7 +106,37 @@ export function randomInRange(
 
   return Math.floor(engine.next() * (max - min + 1)) + min;
 }
+/**
+ * Selects a random item from an array based on weighted probabilities.
+ *
+ * @template T - The type of the items in the array.
+ * @param engine - The RNG engine to use for randomness.
+ * @param {Array<t>} arr - An array of items to choose from.
+ * @param {(item: T) => number} getWeight - A function that returns the weight of an item.
+ * @returns {T} - A randomly selected item, based on the weights.
+ * @throws An error if the array is empty.
+ */
+export function randomWithWeights<T>(
+  engine: RngEngine,
+  arr: Array<T>,
+  getWeight: (item: T) => number
+): T {
+  if (arr.length === 0) {
+    throw new Error(`Can't get an item from an empty array`);
+  }
+  const totalWeight = arr.reduce((sum, item) => sum + getWeight(item), 0);
+  const rand = engine.next() * totalWeight;
 
+  let cumulative = 0;
+  for (const item of arr) {
+    cumulative += getWeight(item);
+    if (rand < cumulative) {
+      return item;
+    }
+  }
+
+  return arr[arr.length - 1];
+}
 
 
 type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister"
