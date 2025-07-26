@@ -20,6 +20,10 @@ export class Mulberry32Engine implements RngEngine {
   }
 
   setState(state: string): void {
-    this.seed = parseInt(state, 10);
+    const parsed = parseInt(state, 10);
+    if (isNaN(parsed)) {
+      throw new Error("Invalid state format: must be a valid number");
+    }
+    this.seed = parsed;
   }
 }

@@ -2,6 +2,10 @@
   "name": "super-rng-engine",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "bunx tsc --noEmit"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },

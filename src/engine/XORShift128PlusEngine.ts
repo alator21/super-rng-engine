@@ -27,9 +27,6 @@ export class XORShift128PlusEngine implements RngEngine {
   getState(): string {
     return JSON.stringify(this.state.map(n => n.toString()));
   }
-  g() {
-    return this.state
-  }
 
   setState(state: string): void {
     const parsed = JSON.parse(state);

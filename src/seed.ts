@@ -8,7 +8,7 @@ function hashStringToNumber(str: string): number {
 
 export function generateSeed(possibleSeed?: string): number {
   if (possibleSeed === undefined) {
-    return Math.floor(Math.random() * 100000);
+    return Math.floor(Math.random() * 0xFFFFFFFF);
   }
   return hashStringToNumber(possibleSeed);
 }
