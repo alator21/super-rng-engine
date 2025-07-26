@@ -27,10 +27,15 @@ This is a TypeScript library for stateful random number generation engines. The 
 - `MersenneTwisterEngine.ts` - High-quality PRNG
 - Each implements the `RngEngine` interface
 
-**Factory & Utilities** (`src/RNGFactory.ts`):
+**Factory Functions** (`src/factory.ts`):
 - `createEngine(type, seed?)` - Creates engine instances
 - `createEngineWithState(type, state)` - Restores from saved state
-- Utility functions: `randomInRange()`, `randomItemFromArray()`, `randomItemsFromArray()`, `randomWithWeights()`
+
+**Utility Functions** (`src/utils.ts`):
+- `randomInRange()` - Generate random integers in a range
+- `randomItemFromArray()` - Pick random item from array
+- `randomItemsFromArray()` - Pick multiple unique items
+- `randomWithWeights()` - Weighted random selection
 
 **Seed Management** (`src/seed.ts`):
 - Handles seed generation and validation
@@ -39,7 +44,7 @@ This is a TypeScript library for stateful random number generation engines. The 
 ### Testing Strategy
 
 Tests are organized by functionality in `src/__tests__/`:
-- `RNGFactory.test.ts` - Factory functions and utilities
+- `factory-and-utils.test.ts` - Factory functions and utility functions
 - `bounds.test.ts`, `uniformity.test.ts`, `chi-square.test.ts` - Statistical validation
 - `determinism.test.ts` - Reproducibility verification
 - `mean-variance.test.ts` - Distribution analysis

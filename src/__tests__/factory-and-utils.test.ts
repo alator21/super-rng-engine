@@ -1,5 +1,6 @@
 import {describe, it, expect} from 'bun:test';
-import {randomItemFromArray, randomItemsFromArray, randomInRange, randomWithWeights, createEngine} from '../RNGFactory';
+import {createEngine} from '../factory';
+import {randomItemFromArray, randomItemsFromArray, randomInRange, randomWithWeights} from '../utils';
 import type {RngEngine} from '../engine/RngEngine';
 
 const mockEngine = (sequence: number[]): RngEngine => {
@@ -16,7 +17,7 @@ const mockEngine = (sequence: number[]): RngEngine => {
   };
 };
 
-describe('RNGFactory', () => {
+describe('Factory and Utils', () => {
   describe('randomItemFromArray', () => {
     it('should return a random item from the array', () => {
       const engine: RngEngine = mockEngine([0.1]);

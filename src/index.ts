@@ -1,9 +1,11 @@
 export {
   createEngine,
-  createEngineWithState,
+  createEngineWithState
+} from './factory';
+export {
   randomInRange,
   randomItemFromArray,
   randomItemsFromArray,
   randomWithWeights
-} from './RNGFactory';
+} from './utils';
 export type {RngEngine} from './engine/RngEngine';
