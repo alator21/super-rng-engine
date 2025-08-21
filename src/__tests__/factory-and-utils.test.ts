@@ -1,6 +1,6 @@
 import {describe, it, expect} from 'bun:test';
 import {createEngine} from '../factory';
-import {randomItemFromArray, randomItemsFromArray, randomInRange, randomWithWeights} from '../utils';
+import {randomItemFromArray, randomItemsFromArray, randomInRange, randomWithWeights, shuffle} from '../utils';
 import type {RngEngine} from '../engine/RngEngine';
 
 const mockEngine = (sequence: number[]): RngEngine => {
@@ -142,7 +142,65 @@ describe('Factory and Utils', () => {
       const result = randomWithWeights(engine, items, i => i.weight);
       expect(result.name).toBe("Z");
     });
-  })
+  });
+
+  describe('shuffle', () => {
+    it('should not modify the original array', () => {
+      const engine = mockEngine([0.5, 0.2, 0.8]);
+      const original = [1, 2, 3, 4, 5];
+      const originalCopy = [...original];
+      const shuffled = shuffle(engine, original);
+      
+      expect(original).toEqual(originalCopy);
+      expect(shuffled).not.toBe(original);
+    });
+
+    it('should return an array with the same length', () => {
+      const engine = mockEngine([0.1, 0.9, 0.5]);
+      const arr = [1, 2, 3, 4, 5];
+      const shuffled = shuffle(engine, arr);
+      
+      expect(shuffled).toHaveLength(arr.length);
+    });
+
+    it('should contain all the same elements', () => {
+      const engine = mockEngine([0.7, 0.3, 0.6]);
+      const arr = [1, 2, 3, 4, 5];
+      const shuffled = shuffle(engine, arr);
+      
+      expect(shuffled.sort()).toEqual(arr.sort());
+    });
+
+    it('should handle empty arrays', () => {
+      const engine = mockEngine([0.5]);
+      const arr: number[] = [];
+      const shuffled = shuffle(engine, arr);
+      
+      expect(shuffled).toEqual([]);
+      expect(shuffled).not.toBe(arr);
+    });
+
+    it('should handle single element arrays', () => {
+      const engine = mockEngine([0.5]);
+      const arr = [42];
+      const shuffled = shuffle(engine, arr);
+      
+      expect(shuffled).toEqual([42]);
+      expect(shuffled).not.toBe(arr);
+    });
+
+    it('should produce different results with different random sequences', () => {
+      const arr = [1, 2, 3, 4, 5];
+      
+      const engine1 = mockEngine([0.9, 0.8, 0.7, 0.6]);
+      const engine2 = mockEngine([0.1, 0.2, 0.3, 0.4]);
+      
+      const shuffled1 = shuffle(engine1, arr);
+      const shuffled2 = shuffle(engine2, arr);
+      
+      expect(shuffled1).not.toEqual(shuffled2);
+    });
+  });
 
 
 });

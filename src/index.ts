@@ -6,6 +6,7 @@ export {
   randomInRange,
   randomItemFromArray,
   randomItemsFromArray,
-  randomWithWeights
+  randomWithWeights,
+  shuffle
 } from './utils';
 export type {RngEngine} from './engine/RngEngine';

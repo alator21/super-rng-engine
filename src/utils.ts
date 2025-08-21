@@ -104,3 +104,19 @@ export function randomWithWeights<T>(
 
   return arr[arr.length - 1];
 }
+
+/**
+ * Shuffles an array using the Fisher-Yates algorithm without modifying the original.
+ *
+ * @param engine - The RNG engine to use for randomness.
+ * @param arr - The array to shuffle (original array is not modified).
+ * @returns A new shuffled array.
+ */
+export function shuffle<T>(engine: RngEngine, arr: Array<T>): Array<T> {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(engine.next() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
