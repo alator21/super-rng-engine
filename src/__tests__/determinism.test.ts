@@ -72,7 +72,7 @@ describe("determinism", () => {
     });
   });
 
-  describe.only("MersenneTwisterEngine", () => {
+  describe("MersenneTwisterEngine", () => {
     it("Same seed produces identical sequences", () => {
       const engine1 = new MersenneTwisterEngine(42);
       const engine2 = new MersenneTwisterEngine(42);
