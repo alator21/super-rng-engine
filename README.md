@@ -80,16 +80,16 @@ createEngine('mulberry32', 'level-1-loot'); // same sequence every time
 createEngine('mulberry32');                 // different sequence each run
 ```
 
-`XORShift128PlusEngine` treats a seed of `0` as invalid, because an all-zero internal state makes the algorithm degenerate to always returning `0`:
+`'xorshift128plus'` internally rejects a numeric seed of `0` with `InvalidSeedError`, because an all-zero internal state makes the algorithm degenerate to always returning `0`. In practice this only matters if the FNV-1a hash of your seed string happens to land on exactly `0`, which is rare but not impossible — if you seed many engines programmatically, it's worth catching:
 
 ```typescript
 import { createEngine, InvalidSeedError } from '@alator21/super-rng-engine';
 
 try {
-  createEngine('xorshift128plus', '');
+  createEngine('xorshift128plus', someProgrammaticallyGeneratedSeed);
 } catch (e) {
   if (e instanceof InvalidSeedError) {
-    // handle a seed the engine can't use
+    // extremely unlikely, but pick a different seed and retry
   }
 }
 ```
