@@ -1,7 +1,8 @@
 import type { RngEngine } from "./RngEngine";
-
+import { InvalidStateError } from "../errors";
 
 export class MersenneTwisterEngine implements RngEngine {
+  readonly type = "mersenne-twister" as const;
   private MT: Uint32Array;
   private index: number;
 
@@ -46,17 +47,22 @@ export class MersenneTwisterEngine implements RngEngine {
   }
 
   setState(state: string): void {
+    let parsedState;
     try {
-      const parsedState = JSON.parse(state);
-      if (Array.isArray(parsedState.MT) && parsedState.MT.length === 624 && typeof parsedState.index === 'number') {
-        this.MT = new Uint32Array(parsedState.MT);
-        this.index = parsedState.index;
-      } else {
-        throw new Error("Invalid state format");
-      }
+      parsedState = JSON.parse(state);
     } catch (error) {
-      throw new Error("Failed to parse state: " + error);
+      throw new InvalidStateError("Failed to parse state: " + error);
     }
+    if (
+      !Array.isArray(parsedState.MT) ||
+      parsedState.MT.length !== 624 ||
+      !parsedState.MT.every((n: unknown) => typeof n === 'number') ||
+      typeof parsedState.index !== 'number'
+    ) {
+      throw new InvalidStateError("Invalid state format");
+    }
+    this.MT = new Uint32Array(parsedState.MT);
+    this.index = parsedState.index;
   }
 }
 

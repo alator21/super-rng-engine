@@ -1,9 +1,19 @@
 /**
+ * The identifiers of the RNG algorithms supported by this library.
+ */
+export type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister";
+
+/**
  * An interface for a random number generator (RNG) engine.
- * Implementations must provide deterministic random number generation 
+ * Implementations must provide deterministic random number generation
  * with state management capabilities.
  */
 export interface RngEngine {
+  /**
+   * The algorithm this engine instance implements.
+   */
+  readonly type: EngineType;
+
   /**
    * Generates the next random number in the range [0, 1).
    * 

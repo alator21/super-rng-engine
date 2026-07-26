@@ -1,6 +1,8 @@
 import type { RngEngine } from "./RngEngine";
+import { InvalidStateError } from "../errors";
 
 export class Mulberry32Engine implements RngEngine {
+  readonly type = "mulberry32" as const;
   private seed: number;
 
   constructor(seed: number) {
@@ -22,7 +24,7 @@ export class Mulberry32Engine implements RngEngine {
   setState(state: string): void {
     const parsed = parseInt(state, 10);
     if (isNaN(parsed)) {
-      throw new Error("Invalid state format: must be a valid number");
+      throw new InvalidStateError("Invalid state format: must be a valid number");
     }
     this.seed = parsed;
   }

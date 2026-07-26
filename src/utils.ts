@@ -74,6 +74,44 @@ export function randomInRange(
 }
 
 /**
+ * Generates a random floating-point number within a specified range.
+ *
+ * @param engine - The RNG engine to use for randomness.
+ * @param min - The minimum value of the range (inclusive).
+ * @param max - The maximum value of the range (exclusive).
+ * @returns A random floating-point number within the range `[min, max)`.
+ * @throws An error if `min` is greater than `max`.
+ */
+export function randomFloat(
+  engine: RngEngine,
+  min: number,
+  max: number
+): number {
+  if (min > max) {
+    throw new Error(`Min ${min} is out of range ${max}`);
+  }
+  return engine.next() * (max - min) + min;
+}
+
+/**
+ * Generates a random boolean.
+ *
+ * @param engine - The RNG engine to use for randomness.
+ * @param probability - The probability of returning `true`, between 0 and 1 (inclusive). Defaults to 0.5.
+ * @returns A random boolean, `true` with the given probability.
+ * @throws An error if `probability` is outside the range `[0, 1]`.
+ */
+export function randomBoolean(
+  engine: RngEngine,
+  probability: number = 0.5
+): boolean {
+  if (probability < 0 || probability > 1) {
+    throw new Error(`Probability ${probability} must be between 0 and 1.`);
+  }
+  return engine.next() < probability;
+}
+
+/**
  * Selects a random item from an array based on weighted probabilities.
  *
  * @template T - The type of the items in the array.

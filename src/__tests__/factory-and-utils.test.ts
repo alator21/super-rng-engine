@@ -6,6 +6,7 @@ import type {RngEngine} from '../engine/RngEngine';
 const mockEngine = (sequence: number[]): RngEngine => {
   let index = 0;
   return {
+    type: 'mulberry32',
     next: () => {
       const value = sequence[index % sequence.length];
       index++;

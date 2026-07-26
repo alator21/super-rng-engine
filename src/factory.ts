@@ -1,10 +1,8 @@
 import {MersenneTwisterEngine} from "./engine/MersenneTwisterEngine";
 import {Mulberry32Engine} from "./engine/Mulberry32Engine";
-import type {RngEngine} from "./engine/RngEngine";
+import type {EngineType, RngEngine} from "./engine/RngEngine";
 import {XORShift128PlusEngine} from "./engine/XORShift128PlusEngine";
 import {generateSeed} from "./seed";
-
-type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister"
 
 /**
  * Creates a random number generator (RNG) engine based on the specified type.
