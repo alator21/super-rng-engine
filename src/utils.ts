@@ -1,4 +1,4 @@
-import type {RngEngine} from "./engine/RngEngine";
+import type { RngEngine } from "./engine/RngEngine";
 
 /**
  * Selects a random item from an array using the given RNG engine.
@@ -28,7 +28,7 @@ export function randomItemFromArray<T>(engine: RngEngine, arr: Array<T>): T {
 export function randomItemsFromArray<T>(
   engine: RngEngine,
   arr: Array<T>,
-  numberOfItems: number
+  numberOfItems: number,
 ): Array<T> {
   if (numberOfItems <= 0) {
     throw new Error(`You must request at least 1 item.`);
@@ -61,11 +61,7 @@ export function randomItemsFromArray<T>(
  * @returns A random integer within the range `[min, max]`.
  * @throws An error if `min` is greater than `max`.
  */
-export function randomInRange(
-  engine: RngEngine,
-  min: number,
-  max: number
-): number {
+export function randomInRange(engine: RngEngine, min: number, max: number): number {
   if (min > max) {
     throw new Error(`Min ${min} is out of range ${max}`);
   }
@@ -82,11 +78,7 @@ export function randomInRange(
  * @returns A random floating-point number within the range `[min, max)`.
  * @throws An error if `min` is greater than `max`.
  */
-export function randomFloat(
-  engine: RngEngine,
-  min: number,
-  max: number
-): number {
+export function randomFloat(engine: RngEngine, min: number, max: number): number {
   if (min > max) {
     throw new Error(`Min ${min} is out of range ${max}`);
   }
@@ -101,10 +93,7 @@ export function randomFloat(
  * @returns A random boolean, `true` with the given probability.
  * @throws An error if `probability` is outside the range `[0, 1]`.
  */
-export function randomBoolean(
-  engine: RngEngine,
-  probability: number = 0.5
-): boolean {
+export function randomBoolean(engine: RngEngine, probability: number = 0.5): boolean {
   if (probability < 0 || probability > 1) {
     throw new Error(`Probability ${probability} must be between 0 and 1.`);
   }
@@ -124,7 +113,7 @@ export function randomBoolean(
 export function randomWithWeights<T>(
   engine: RngEngine,
   arr: Array<T>,
-  getWeight: (item: T) => number
+  getWeight: (item: T) => number,
 ): T {
   if (arr.length === 0) {
     throw new Error(`Can't get an item from an empty array`);

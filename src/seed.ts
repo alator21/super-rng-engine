@@ -20,7 +20,7 @@ function hashStringToNumber(str: string): number {
  */
 export function generateSeed(possibleSeed?: string): number {
   if (possibleSeed === undefined) {
-    return Math.floor(Math.random() * 0xFFFFFFFF);
+    return Math.floor(Math.random() * 0xffffffff);
   }
   return hashStringToNumber(possibleSeed);
 }

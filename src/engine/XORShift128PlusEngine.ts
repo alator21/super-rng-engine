@@ -4,7 +4,7 @@ import { InvalidSeedError, InvalidStateError } from "../errors";
 export class XORShift128PlusEngine implements RngEngine {
   readonly type = "xorshift128plus" as const;
   private state: [bigint, bigint];
-  private static readonly MASK_64BIT = 0xFFFFFFFFFFFFFFFFn;
+  private static readonly MASK_64BIT = 0xffffffffffffffffn;
 
   /**
    * @param seed - Must be a non-zero integer. A zero seed produces an
@@ -19,7 +19,10 @@ export class XORShift128PlusEngine implements RngEngine {
       throw new InvalidSeedError("Seed value cannot be zero.");
     }
     const seedBigInt = BigInt(seed) & XORShift128PlusEngine.MASK_64BIT;
-    this.state = [seedBigInt, (seedBigInt ^ 0x9E3779B97F4A7C15n) & XORShift128PlusEngine.MASK_64BIT];
+    this.state = [
+      seedBigInt,
+      (seedBigInt ^ 0x9e3779b97f4a7c15n) & XORShift128PlusEngine.MASK_64BIT,
+    ];
   }
 
   private xorshift128plus(): bigint {
@@ -35,23 +38,26 @@ export class XORShift128PlusEngine implements RngEngine {
   }
 
   getState(): string {
-    return JSON.stringify(this.state.map(n => n.toString()));
+    return JSON.stringify(this.state.map((n) => n.toString()));
   }
 
   setState(state: string): void {
     let parsed;
     try {
       parsed = JSON.parse(state);
-    } catch (error) {
+    } catch {
       throw new InvalidStateError("Invalid state format.");
     }
     if (
       !Array.isArray(parsed) ||
       parsed.length !== 2 ||
-      !parsed.every((n: unknown) => typeof n === 'string' && /^-?\d+$/.test(n))
+      !parsed.every((n: unknown) => typeof n === "string" && /^-?\d+$/.test(n))
     ) {
       throw new InvalidStateError("Invalid state format.");
     }
-    this.state = [BigInt(parsed[0]) & XORShift128PlusEngine.MASK_64BIT, BigInt(parsed[1]) & XORShift128PlusEngine.MASK_64BIT];
+    this.state = [
+      BigInt(parsed[0]) & XORShift128PlusEngine.MASK_64BIT,
+      BigInt(parsed[1]) & XORShift128PlusEngine.MASK_64BIT,
+    ];
   }
 }

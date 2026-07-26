@@ -1,7 +1,4 @@
-export {
-  createEngine,
-  createEngineWithState
-} from './factory';
+export { createEngine, createEngineWithState } from "./factory";
 export {
   randomBoolean,
   randomFloat,
@@ -9,7 +6,7 @@ export {
   randomItemFromArray,
   randomItemsFromArray,
   randomWithWeights,
-  shuffle
-} from './utils';
-export {InvalidSeedError, InvalidStateError} from './errors';
-export type {EngineType, RngEngine} from './engine/RngEngine';
+  shuffle,
+} from "./utils";
+export { InvalidSeedError, InvalidStateError } from "./errors";
+export type { EngineType, RngEngine } from "./engine/RngEngine";

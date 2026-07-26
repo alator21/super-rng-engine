@@ -1,8 +1,8 @@
-import {MersenneTwisterEngine} from "./engine/MersenneTwisterEngine";
-import {Mulberry32Engine} from "./engine/Mulberry32Engine";
-import type {EngineType, RngEngine} from "./engine/RngEngine";
-import {XORShift128PlusEngine} from "./engine/XORShift128PlusEngine";
-import {generateSeed} from "./seed";
+import { MersenneTwisterEngine } from "./engine/MersenneTwisterEngine";
+import { Mulberry32Engine } from "./engine/Mulberry32Engine";
+import type { EngineType, RngEngine } from "./engine/RngEngine";
+import { XORShift128PlusEngine } from "./engine/XORShift128PlusEngine";
+import { generateSeed } from "./seed";
 
 /**
  * Creates a random number generator (RNG) engine based on the specified type.
@@ -11,10 +11,7 @@ import {generateSeed} from "./seed";
  * @param seed - Optional.The starting seed of the engine.
  * @returns An instance of an `RngEngine` matching the requested type.
  */
-export function createEngine(
-  type: EngineType,
-  seed?: string
-): RngEngine {
+export function createEngine(type: EngineType, seed?: string): RngEngine {
   return createEngineInternal(type, seed);
 }
 
@@ -25,19 +22,13 @@ export function createEngine(
  * @param state - The previously saved state of the engine.
  * @returns An instance of an `RngEngine` matching the requested type.
  */
-export function createEngineWithState(
-  type: EngineType,
-  state: string
-): RngEngine {
+export function createEngineWithState(type: EngineType, state: string): RngEngine {
   const engine = createEngineInternal(type);
   engine.setState(state);
   return engine;
 }
 
-function createEngineInternal(
-  type: EngineType,
-  possibleSeed?: string
-): RngEngine {
+function createEngineInternal(type: EngineType, possibleSeed?: string): RngEngine {
   const seed = generateSeed(possibleSeed);
   switch (type) {
     case "mulberry32":

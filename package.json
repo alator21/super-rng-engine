@@ -1,13 +1,18 @@
 {
   "name": "super-rng-engine",
-  "module": "index.ts",
   "type": "module",
+  "module": "index.ts",
   "scripts": {
     "test": "bun test",
-    "typecheck": "bunx tsc --noEmit"
+    "typecheck": "bunx tsc --noEmit",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "oxfmt": "^0.60.0",
+    "oxlint": "^1.75.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

@@ -56,8 +56,8 @@ export class MersenneTwisterEngine implements RngEngine {
     if (
       !Array.isArray(parsedState.MT) ||
       parsedState.MT.length !== 624 ||
-      !parsedState.MT.every((n: unknown) => typeof n === 'number') ||
-      typeof parsedState.index !== 'number'
+      !parsedState.MT.every((n: unknown) => typeof n === "number") ||
+      typeof parsedState.index !== "number"
     ) {
       throw new InvalidStateError("Invalid state format");
     }
@@ -65,4 +65,3 @@ export class MersenneTwisterEngine implements RngEngine {
     this.index = parsedState.index;
   }
 }
-
