@@ -4,7 +4,7 @@
   "module": "index.ts",
   "scripts": {
     "test": "bun test",
-    "typecheck": "bunx tsc --noEmit",
+    "typecheck": "node node_modules/typescript7/bin/tsc --noEmit",
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check"
@@ -12,7 +12,8 @@
   "devDependencies": {
     "@types/bun": "latest",
     "oxfmt": "^0.60.0",
-    "oxlint": "^1.75.0"
+    "oxlint": "^1.75.0",
+    "typescript7": "npm:typescript@^7.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
