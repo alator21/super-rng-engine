@@ -60,7 +60,7 @@ const engine = createEngine("mulberry32");
 | Type (`EngineType`)  | Algorithm        | Notes                                                                             |
 | -------------------- | ---------------- | --------------------------------------------------------------------------------- |
 | `'mulberry32'`       | Mulberry32       | Fastest, smallest state (a single 32-bit int). Good default for most uses.        |
-| `'xorshift128plus'`  | XORShift128+     | Fast, longer period than Mulberry32. **Rejects a seed of `0`** (see below).       |
+| `'xorshift128plus'`  | XORShift128+     | Fast, longer period than Mulberry32.                                              |
 | `'mersenne-twister'` | Mersenne Twister | Larger internal state, best statistical quality, slower and heavier to serialize. |
 
 ```typescript
@@ -78,20 +78,6 @@ const engine = createEngine("mersenne-twister", "my-seed");
 ```typescript
 createEngine("mulberry32", "level-1-loot"); // same sequence every time
 createEngine("mulberry32"); // different sequence each run
-```
-
-`'xorshift128plus'` internally rejects a numeric seed of `0` with `InvalidSeedError`, because an all-zero internal state makes the algorithm degenerate to always returning `0`. In practice this only matters if the FNV-1a hash of your seed string happens to land on exactly `0`, which is rare but not impossible — if you seed many engines programmatically, it's worth catching:
-
-```typescript
-import { createEngine, InvalidSeedError } from "@alator21/super-rng-engine";
-
-try {
-  createEngine("xorshift128plus", someProgrammaticallyGeneratedSeed);
-} catch (e) {
-  if (e instanceof InvalidSeedError) {
-    // extremely unlikely, but pick a different seed and retry
-  }
-}
 ```
 
 ## Saving and restoring state

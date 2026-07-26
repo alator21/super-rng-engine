@@ -7,16 +7,14 @@ export class XORShift128PlusEngine implements RngEngine {
   private static readonly MASK_64BIT = 0xffffffffffffffffn;
 
   /**
-   * @param seed - Must be a non-zero integer. A zero seed produces an
-   *   all-zero internal state, which makes xorshift128+ degenerate to
-   *   always returning 0, so it is rejected.
+   * @param seed - Must be an integer. Note that a seed of `0` is fine here:
+   *   the second state lane is derived as `seed ^ goldenRatioConstant`,
+   *   which is non-zero even when `seed` is `0`, so the internal state is
+   *   never the all-zero state that would make xorshift128+ degenerate.
    */
   constructor(seed: number) {
     if (!Number.isInteger(seed)) {
       throw new InvalidSeedError("Seed value must be an integer.");
-    }
-    if (seed === 0) {
-      throw new InvalidSeedError("Seed value cannot be zero.");
     }
     const seedBigInt = BigInt(seed) & XORShift128PlusEngine.MASK_64BIT;
     this.state = [
