@@ -2,12 +2,13 @@ import { MersenneTwisterEngine } from "./engine/MersenneTwisterEngine";
 import { Mulberry32Engine } from "./engine/Mulberry32Engine";
 import type { EngineType, RngEngine } from "./engine/RngEngine";
 import { XORShift128PlusEngine } from "./engine/XORShift128PlusEngine";
+import { Xoshiro256Engine } from "./engine/Xoshiro256Engine";
 import { generateSeed } from "./seed";
 
 /**
  * Creates a random number generator (RNG) engine based on the specified type.
  *
- * @param type - The type of RNG engine to create. Supported values: `"mulberry32"`, `"xorshift128plus"`, `"mersenne-twister"`.
+ * @param type - The type of RNG engine to create. Supported values: `"mulberry32"`, `"xorshift128plus"`, `"mersenne-twister"`, `"xoshiro256"`.
  * @param seed - Optional.The starting seed of the engine.
  * @returns An instance of an `RngEngine` matching the requested type.
  */
@@ -18,7 +19,7 @@ export function createEngine(type: EngineType, seed?: string): RngEngine {
 /**
  * Creates a random number generator (RNG) engine based on the specified type.
  *
- * @param type - The type of RNG engine to create. Supported values: `"mulberry32"`, `"xorshift128plus"`, `"mersenne-twister"`.
+ * @param type - The type of RNG engine to create. Supported values: `"mulberry32"`, `"xorshift128plus"`, `"mersenne-twister"`, `"xoshiro256"`.
  * @param state - The previously saved state of the engine.
  * @returns An instance of an `RngEngine` matching the requested type.
  */
@@ -37,5 +38,7 @@ function createEngineInternal(type: EngineType, possibleSeed?: string): RngEngin
       return new XORShift128PlusEngine(seed);
     case "mersenne-twister":
       return new MersenneTwisterEngine(seed);
+    case "xoshiro256":
+      return new Xoshiro256Engine(seed);
   }
 }

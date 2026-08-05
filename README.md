@@ -6,7 +6,7 @@ Pick an algorithm, seed it (or don't), pull numbers from it, and save/restore it
 
 ## Features
 
-- **Three RNG engines** — Mulberry32 (fast, simple), XORShift128+ (fast, long period), Mersenne Twister (high statistical quality)
+- **Four RNG engines** — Mulberry32 (fast, simple), XORShift128+ (fast, long period), Mersenne Twister (high statistical quality), Xoshiro256\*\* (fast, high statistical quality, long period)
 - **State serialization** — every engine can `getState()`/`setState()` to snapshot and resume a sequence exactly
 - **String or random seeding** — seed with any string for reproducible runs, or omit it for a random start
 - **Small utility set** — ranges, array picks, weighted picks, shuffling, booleans
@@ -57,11 +57,12 @@ const engine = createEngine("mulberry32");
 
 ## Choosing an engine
 
-| Type (`EngineType`)  | Algorithm        | Notes                                                                             |
-| -------------------- | ---------------- | --------------------------------------------------------------------------------- |
-| `'mulberry32'`       | Mulberry32       | Fastest, smallest state (a single 32-bit int). Good default for most uses.        |
-| `'xorshift128plus'`  | XORShift128+     | Fast, longer period than Mulberry32.                                              |
-| `'mersenne-twister'` | Mersenne Twister | Larger internal state, best statistical quality, slower and heavier to serialize. |
+| Type (`EngineType`)  | Algorithm        | Notes                                                                                    |
+| -------------------- | ---------------- | ---------------------------------------------------------------------------------------- |
+| `'mulberry32'`       | Mulberry32       | Fastest, smallest state (a single 32-bit int). Good default for most uses.               |
+| `'xorshift128plus'`  | XORShift128+     | Fast, longer period than Mulberry32.                                                     |
+| `'mersenne-twister'` | Mersenne Twister | Larger internal state, best statistical quality, slower and heavier to serialize.        |
+| `'xoshiro256'`       | Xoshiro256\*\*   | 256-bit state, excellent statistical quality, very long period. Strong all-round choice. |
 
 ```typescript
 const engine = createEngine("mersenne-twister", "my-seed");
@@ -115,7 +116,7 @@ try {
 
 ## Utilities
 
-All utilities take an `RngEngine` as their first argument, so they work with any of the three engines interchangeably.
+All utilities take an `RngEngine` as their first argument, so they work with any of the engines interchangeably.
 
 ```typescript
 import {
@@ -174,7 +175,7 @@ import { InvalidSeedError, InvalidStateError } from "@alator21/super-rng-engine"
 ## API reference
 
 ```typescript
-type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister";
+type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister" | "xoshiro256";
 
 interface RngEngine {
   readonly type: EngineType;

@@ -4,6 +4,7 @@ import { Mulberry32Engine } from "../engine/Mulberry32Engine";
 import type { RngEngine } from "../engine/RngEngine";
 import { MersenneTwisterEngine } from "../engine/MersenneTwisterEngine";
 import { XORShift128PlusEngine } from "../engine/XORShift128PlusEngine";
+import { Xoshiro256Engine } from "../engine/Xoshiro256Engine";
 
 describe("mean variance", () => {
   it("mean variance", () => {
@@ -12,6 +13,7 @@ describe("mean variance", () => {
       Mulberry32: new Mulberry32Engine(seed),
       XORShift128Plus: new XORShift128PlusEngine(seed),
       MersenneTwister: new MersenneTwisterEngine(seed),
+      Xoshiro256: new Xoshiro256Engine(seed),
     };
     for (const [name, engine] of Object.entries(engines)) {
       const samples = Array.from({ length: 100000 }, () => engine.next());

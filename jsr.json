@@ -1,10 +1,17 @@
 {
   "name": "@alator21/super-rng-engine",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "license": "MIT",
   "exports": "./src/index.ts",
   "publish": {
-    "include": ["README.md", "LICENSE", "package.json", "src"],
-    "exclude": ["src/**/*.test.ts"]
+    "include": [
+      "README.md",
+      "LICENSE",
+      "package.json",
+      "src"
+    ],
+    "exclude": [
+      "src/**/*.test.ts"
+    ]
   }
 }

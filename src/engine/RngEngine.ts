@@ -1,7 +1,7 @@
 /**
  * The identifiers of the RNG algorithms supported by this library.
  */
-export type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister";
+export type EngineType = "mulberry32" | "xorshift128plus" | "mersenne-twister" | "xoshiro256";
 
 /**
  * An interface for a random number generator (RNG) engine.
