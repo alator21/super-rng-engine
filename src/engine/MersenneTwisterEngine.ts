@@ -11,7 +11,7 @@ export class MersenneTwisterEngine implements RngEngine {
     this.index = 0;
     this.MT[0] = seed >>> 0;
     for (let i = 1; i < 624; i++) {
-      this.MT[i] = (1812433253 * (this.MT[i - 1] ^ (this.MT[i - 1] >>> 30)) + i) >>> 0;
+      this.MT[i] = (Math.imul(1812433253, this.MT[i - 1] ^ (this.MT[i - 1] >>> 30)) + i) >>> 0;
     }
   }
 

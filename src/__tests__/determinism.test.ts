@@ -4,6 +4,7 @@ import { Mulberry32Engine } from "../engine/Mulberry32Engine";
 import { MersenneTwisterEngine } from "../engine/MersenneTwisterEngine";
 import { XORShift128PlusEngine } from "../engine/XORShift128PlusEngine";
 import { Xoshiro256Engine } from "../engine/Xoshiro256Engine";
+import { createEngine } from "../factory";
 
 describe("determinism", () => {
   describe("Mulberry32", () => {
@@ -90,6 +91,19 @@ describe("determinism", () => {
       const sequence2 = Array.from({ length: 10 }, () => engine2.next());
 
       expect(sequence1).not.toEqual(sequence2);
+    });
+
+    // GitHub issue #1: these string seeds hash to distinct 32-bit seeds
+    // (3313589905 vs 2629973646) that used to collapse to the same state
+    // when seeding multiplied in double precision instead of Math.imul.
+    it("Distinct string seeds do not collapse to the same state", () => {
+      const engine1 = createEngine("mersenne-twister", "seed-17901");
+      const engine2 = createEngine("mersenne-twister", "seed-21703");
+      const sequence1 = Array.from({ length: 3 }, () => engine1.next());
+      const sequence2 = Array.from({ length: 3 }, () => engine2.next());
+
+      expect(sequence1).not.toEqual(sequence2);
+      expect(engine1.getState()).not.toEqual(engine2.getState());
     });
 
     it("State saving and restoring produces the same sequence", () => {
