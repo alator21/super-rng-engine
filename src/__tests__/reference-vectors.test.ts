@@ -20,8 +20,8 @@ type Seed = (typeof SEEDS)[number];
 
 // 32-bit engines return uint32 / 2^32, so the raw output is recovered exactly.
 const toUint32 = (x: number) => x * 2 ** 32;
-// 64-bit engines return Number(uint64) / 2^64; compute the expected float the same way.
-const fromUint64 = (x: bigint) => Number(x) / 2 ** 64;
+// 64-bit engines return the top 53 bits of the uint64 output divided by 2^53.
+const fromUint64 = (x: bigint) => Number(x >> 11n) / 2 ** 53;
 
 const draw = (engine: { next(): number }, n: number) =>
   Array.from({ length: n }, () => engine.next());

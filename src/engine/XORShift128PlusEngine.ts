@@ -32,7 +32,10 @@ export class XORShift128PlusEngine implements RngEngine {
   }
 
   next(): number {
-    return Number(this.xorshift128plus()) / Number(XORShift128PlusEngine.MASK_64BIT + 1n);
+    // Keep the top 53 bits so the result is exactly representable as a double
+    // and strictly below 1. Dividing the full 64-bit value by 2^64 rounds
+    // values within ~2^10 of 2^64 up to exactly 1.0.
+    return Number(this.xorshift128plus() >> 11n) / 2 ** 53;
   }
 
   getState(): string {

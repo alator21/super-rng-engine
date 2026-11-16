@@ -57,7 +57,9 @@ export class Xoshiro256Engine implements RngEngine {
   }
 
   next(): number {
-    return Number(this.xoshiro256starstar()) / Number(MASK_64BIT + 1n);
+    // Keep the top 53 bits so the result is exactly representable as a double
+    // and strictly below 1 (see XORShift128PlusEngine.next).
+    return Number(this.xoshiro256starstar() >> 11n) / 2 ** 53;
   }
 
   getState(): string {
